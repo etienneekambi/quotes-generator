@@ -24,7 +24,6 @@ async function getQuotes(){
 
         newQuote();
 
-
     } catch (error) {
         // Catch Error here
         console.log(error);
@@ -33,3 +32,13 @@ async function getQuotes(){
 
 // On load 
 getQuotes();
+
+// Tweet a quote
+function tweetQuote() {
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${quoteText.textContent} - ${authorText.textContent}`; 
+    window.open(twitterUrl, '_blank')
+}
+
+// Event listeners
+newQuoteBtn.addEventListener('click', newQuote);
+twitterBtn.addEventListener('click', tweetQuote);
