@@ -7,42 +7,43 @@ const loader = document.getElementById('loader');
 
 let apiQuotes = [];
 
-// Show loading
-function loading(){
+function showLoadingSpinner(){
     loader.hidden = false;
-    quoteContainer.hidden = true;
 }
 
-// Hide loading
-function complete(){
-    quoteContainer.hidden = false;
+// Hide showLoadingSpinner
+function removeLoadingSpinner(){
     loader.hidden = true;
+    quoteContainer.classList.remove('hidecontent');
 }
 
 // New quote
 function newQuote() {
-    loading();
+    showLoadingSpinner();
     // Pick a random quote from apiQuote array
     const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
 
-    quoteText.textContent = quote.text;
-    authorText.textContent = (!quote.author) ? "Unknown" : quote.author;
+    quoteText.innerText = quote.text;
+    authorText.innerText = (!quote.author) ? "Unknown" : quote.author;
 
     // Set quote, hide loader
-    complete();
+    removeLoadingSpinner();
 }
 
 // Get quotes from API
 async function getQuotes(){
+    
     const apiUrl = 'https://jacintodesign.github.io/quotes-api/data/quotes.json';
-    // const apiUrl = 'https://zenquotes.io/api/random'; deactivate due to CORS issues. To be resolved
+    // const apiUrl = 'https://zenquotes.io/api/random'; 
+    // const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+    
     try {
         const reponse = await fetch(apiUrl);
         apiQuotes = await reponse.json();
         newQuote();
     } catch (error) {
         // Catch Error here
-        console.log(error);
+        console.log('Whoops, no quote',error);
     }
 }
 
@@ -52,7 +53,9 @@ getQuotes();
 
 // Tweet a quote
 function tweetQuote() {
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${quoteText.textContent} - ${authorText.textContent}`; 
+    const quote = quoteText.innerText;
+    const author = authorText.innerText;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${quote} - ${author}`; 
     window.open(twitterUrl, '_blank')
 }
 
